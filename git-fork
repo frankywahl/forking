@@ -48,17 +48,12 @@ if [ -d ${LOCAL_REPO} ]; then
 fi
 
 echo "\nCloning ${@} from user ${LOCAL_USER} and repo ${LOCAL_REPO} into github user ${HUB_USER}\n"
-git clone $@ 
+git clone -o upstream $@ 
 cd $LOCAL_REPO
 hub fork
-git remote rename origin upstream
 git remote rename ${HUB_USER} origin
 git remote update
 git remote prune origin
 git remote prune upstream
-
-# Set master to track upstream
-git config branch.master.remote upstream
-git config branch.master.merge refs/heads/master
 
 remove_all_branches
