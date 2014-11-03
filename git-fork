@@ -1,59 +1,46 @@
-#!/bin/sh 
+#!/usr/bin/env ruby
+# encoding: utf-8
 
-# Small bash script to quickly fork a project in github
-# Version 0.1
-# Todo: 
-#   * filters if upstream repo does not exist of if already forked...
-#   * https protocol
-#   * ...
-# 
-# Need hub. To install, type brew install hub
+require 'optparse'
+require 'pry'
 
 
-print_help() {
-    cat <<EOF
-Usage: $0 git@github.com:<user>/<repo.git> 
+file = File.symlink?(__FILE__) ? File.realpath(__FILE__) : __FILE__
+Dir["#{File.expand_path("../lib", file)}/**/*.rb"].map{|x| require x}
 
-  Fork and create and upstream 
-  This assumes you have hub installed
-    (brew install hub)
-EOF
-}
-                       
-if [[ ! $# -eq 1 ]] ; then  
-  print_help           
-  exit 1               
-fi
+# TODO:
+# Exisitng directory
+# GHE
 
-# Make sure we have hub
-if ! which hub >/dev/null ; then
-  echo "You need to install hub\n $ brew install hub"
-  exit 1               
-fi
+options = {}
 
-# Removes all branches that are both on upstream and origin
-remove_all_branches() {
-  # remove other people's branches from your github repo
-  # keep just the master
-  for i in `git branch -r | grep upstream | grep -v -E "upstream/master" |  sed -e "s/\ \ upstream\///"`; do git push origin :${i}; done
-}
+option_parser = OptionParser.new do |opts|
+  banner = ["Usage: #{File.basename($PROGRAM_NAME)} [options] git@github.com:<user>/<repo.git>\n"]
+  banner << "Fork and create and upstream"
+  banner << "This assumes you have hub installed"
+  banner << "(brew install hub)"
+  opts.banner = banner.join("\n")
+  # Create a switch
+  opts.on("--[no-]pullrequest", "Download pull requests") do |pullrequest|
+      options[:download_pull_request] = pullrequest
+  end
+  # Create a flag
+  opts.on("-u", "--user USER", "Github user to use") do |user|
+    options[:user] = user
+  end
+end
 
-LOCAL_USER=`echo $@ | cut -d : -f 2 | cut -d / -f 1`
-LOCAL_REPO=`echo $@ | cut -d : -f 2 | cut -d / -f 2 | sed 's/.git//'`
-HUB_USER=`grep -A 3 github.com ~/.config/hub | grep user: | sed 's/  user: //'`
+option_parser.parse!
 
-if [ -d ${LOCAL_REPO} ]; then
-  echo "The directory ${LOCAL_REPO} already exists"
+if ARGV.empty?
+  puts "Error, you must supply a project to fork"
+  puts
+  puts option_parser.help
   exit 1
-fi
+else
+  options[:repository] = Forking::Repository.new(ARGV.shift)
+  options[:directory] = ARGV.shift
+end
 
-echo "\nCloning ${@} from user ${LOCAL_USER} and repo ${LOCAL_REPO} into github user ${HUB_USER}\n"
-git clone -o upstream $@ 
-cd $LOCAL_REPO
-hub fork
-git remote rename ${HUB_USER} origin
-git remote update
-git remote prune origin
-git remote prune upstream
-
-remove_all_branches
+a = Forking::Handler.new(options)
+a.handle
