@@ -2,7 +2,11 @@
 # encoding: utf-8
 
 require 'optparse'
-require 'pry'
+begin
+  require 'pry'
+rescue LoadError
+  puts "Pry is not availble"
+end
 
 
 file = File.symlink?(__FILE__) ? File.realpath(__FILE__) : __FILE__
