@@ -2,6 +2,10 @@
 
 A bash script for forking a repo
 
+# Code Status
+
+[![Build Status](https://travis-ci.org/frankywahl/forking.svg?branch=master)](https://travis-ci.org/frankywahl/forking)
+
 ## Usage
 
 After installation, run the command with the repo you want to fork. EG
@@ -27,3 +31,4 @@ Copy `git-fork` into any directory that is included in you `$PATH`
 ### Notes
 `git-fork` creates a name collision with `hub fork` if you aliased hub to git. 
 To avoid that issue, you may want to either re-name this `git-fork` file you downloaded or remove the alias.
+
