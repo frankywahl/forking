@@ -8,4 +8,6 @@ module Forking
       [MAJOR, MINOR, PATCH].join(".")
     end
   end
+
+  VERSION = Version.to_s
 end
