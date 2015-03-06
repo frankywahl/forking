@@ -5,14 +5,13 @@ require 'optparse'
 begin
   require 'pry'
 rescue LoadError
-  puts "Pry is not availble"
+  puts 'Pry is not availble'
 end
 
-
 file = File.symlink?(__FILE__) ? File.realpath(__FILE__) : __FILE__
-Dir["#{File.expand_path("../lib", file)}/**/*.rb"].map{|x| require x}
+Dir["#{File.expand_path('../lib', file)}/**/*.rb"].map { |x| require x }
 
-# TODO:
+# TODO: list
 # Exisitng directory
 # GHE
 
@@ -20,16 +19,16 @@ options = {}
 
 option_parser = OptionParser.new do |opts|
   banner = ["Usage: #{File.basename($PROGRAM_NAME)} [options] git@github.com:<user>/<repo.git>\n"]
-  banner << "Fork and create and upstream"
-  banner << "This assumes you have hub installed"
-  banner << "(brew install hub)"
+  banner << 'Fork and create and upstream'
+  banner << 'This assumes you have hub installed'
+  banner << '(brew install hub)'
   opts.banner = banner.join("\n")
   # Create a switch
-  opts.on("--[no-]pullrequest", "Download pull requests") do |pullrequest|
-      options[:download_pull_request] = pullrequest
+  opts.on('--[no-]pullrequest', 'Download pull requests') do |pullrequest|
+    options[:download_pull_request] = pullrequest
   end
   # Create a flag
-  opts.on("-u", "--user USER", "Github user to use") do |user|
+  opts.on('-u', '--user USER', 'Github user to use') do |user|
     options[:user] = user
   end
 end
@@ -37,7 +36,7 @@ end
 option_parser.parse!
 
 if ARGV.empty?
-  puts "Error, you must supply a project to fork"
+  puts 'Error, you must supply a project to fork'
   puts
   puts option_parser.help
   exit 1

@@ -1,0 +1,23 @@
+AllCops:
+  Exclude:
+    - forking.gemspec
+
+Documentation:
+  Enabled: false
+
+LineLength:
+  Enabled: true
+  Max: 140
+
+Style/FileName:
+  Exclude:
+    - git-fork
+
+RSpec/FilePath:
+  Exclude:
+    - spec/command_spec.rb
+    - spec/handler_spec.rb
+    - spec/repository_spec.rb
+
+
+require: rubocop-rspec

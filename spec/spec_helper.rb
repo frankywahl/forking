@@ -1,7 +1,7 @@
 begin
   require 'pry'
 rescue LoadError
-  puts "Pry is not availble"
+  puts 'Pry is not availble'
 end
 
 require 'yaml'

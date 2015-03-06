@@ -1,6 +1,5 @@
 module Forking
   class Repository
-
     attr_accessor :uri
 
     def initialize(uri)
@@ -16,17 +15,15 @@ module Forking
     end
 
     def user
-      @user ||= uri.split(":").last.split('/').first
+      @user ||= uri.split(':').last.split('/').first
     end
 
     def domain
-      @domain ||= uri.split("@").last.split(":").first
+      @domain ||= uri.split('@').last.split(':').first
     end
 
     def ssh_user
-      @ssh_user ||= uri.split("@").first
+      @ssh_user ||= uri.split('@').first
     end
-
   end
 end
-

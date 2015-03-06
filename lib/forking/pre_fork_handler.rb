@@ -1,6 +1,5 @@
 module Forking
   class PreForkHandler
-
     attr_reader :directory
 
     def initialize(options = {})
@@ -13,18 +12,17 @@ module Forking
     end
 
     private
+
     def check_for_hub_command
-      unless Command.exists?("hub")
-        puts "You need to install hub\n $ brew install hub"
-        exit 1
-      end
+      return unless Command.exists?('hub')
+      puts "You need to install hub\n $ brew install hub"
+      exit 1
     end
 
     def check_if_directory_exists
-      if directory_exists? directory
-        puts "Directory #{directory} alreday exists"
-        exit 1
-      end
+      return unless directory_exists? directory
+      puts "Directory #{directory} alreday exists"
+      exit 1
     end
 
     def directory_exists?(directory)
