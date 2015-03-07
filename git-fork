@@ -41,7 +41,7 @@ if ARGV.empty?
   puts option_parser.help
   exit 1
 else
-  options[:repository] = Forking::Repository.new(ARGV.shift)
+  options[:repository] = Forking::SSHRepository.new(ARGV.shift)
   options[:directory] = ARGV.shift
 end
 
